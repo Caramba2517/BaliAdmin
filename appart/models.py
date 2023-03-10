@@ -11,6 +11,12 @@ class RentUser(models.Model):
     tg_id = models.BigIntegerField(verbose_name='Telegram ID', null=False, unique=True)
     register = models.DateTimeField(verbose_name='Date Registration', null=False)
     last_activity = models.DateTimeField(verbose_name='Last Activity', null=False)
+    LANGUAGE = [
+        ("EN", "English"),
+        ("RU", "Русский"),
+        ("IN", "Indonesian")
+    ]
+    default_lang = models.CharField(verbose_name='Default language', null=False, choices=LANGUAGE, max_length=2, default=None)
 
     def __str__(self):
         return f'Telegram Username: {self.username}, Telegram ID: {self.tg_id}'
