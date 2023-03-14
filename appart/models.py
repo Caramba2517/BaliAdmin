@@ -1,5 +1,6 @@
 from django.db import models
 from multiselectfield import MultiSelectField
+from django.contrib.postgres.fields import ArrayField
 
 # Create your models here.
 
@@ -17,7 +18,8 @@ class RentUser(models.Model):
         ("RU", "Русский"),
         ("IN", "Indonesian")
     ]
-    default_lang = models.CharField(verbose_name='Default language', null=False, choices=LANGUAGE, max_length=2, default=None)
+    default_lang = models.CharField(verbose_name='Default language', null=False, choices=LANGUAGE, max_length=2,
+                                    default=None)
 
     def __str__(self):
         return f'Telegram Username: {self.username}, Telegram ID: {self.tg_id}'
@@ -52,7 +54,7 @@ class Apartment(models.Model):
                  ('MONTH', 'MONTH'),
                  ('YEAR', 'YEAR')]
     rent_term = models.CharField(verbose_name='Rental term', max_length=5, choices=RENT_TERM, blank=True, null=True)
-    image = models.ImageField()
+    images = ArrayField(models.ImageField(upload_to='apartment_images'), default=list)
     price_rup = models.BigIntegerField(verbose_name='Price in Rupee', blank=True, null=True)
     price_usd = models.BigIntegerField(verbose_name='Price in USD', blank=True, null=True)
 

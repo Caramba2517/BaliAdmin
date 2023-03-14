@@ -41,7 +41,7 @@ INSTALLED_APPS = [
 
     'appart',
     'statistic',
-    'texts_in_bot',
+    'texts_in_bot'
 ]
 
 MIDDLEWARE = [
