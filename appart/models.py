@@ -1,8 +1,5 @@
 from django.db import models
 from multiselectfield import MultiSelectField
-from django.contrib.postgres.fields import ArrayField
-
-# Create your models here.
 
 
 class RentUser(models.Model):
@@ -32,6 +29,13 @@ class Location(models.Model):
         return f'Location: {self.name}'
 
 
+class Image(models.Model):
+    image = models.ImageField(upload_to=f'appart/images/')
+
+    def __str__(self):
+        return f'Image ID: {self.id}'
+
+
 class Apartment(models.Model):
     link = models.URLField(verbose_name='Link to original source')
     agent_name = models.CharField(verbose_name='Agent Name', max_length=150, blank=True, null=True)
@@ -49,12 +53,11 @@ class Apartment(models.Model):
                  ('TV', 'TV'),
                  ('Parking area', 'Parking area'))
     amenities = MultiSelectField(verbose_name='Amenities', max_length=244, choices=AMENITIES, blank=True, null=True)
-
+    images = models.ManyToManyField(Image, verbose_name='Images', blank=True)
     RENT_TERM = [('DAY', 'DAY'),
                  ('MONTH', 'MONTH'),
                  ('YEAR', 'YEAR')]
     rent_term = models.CharField(verbose_name='Rental term', max_length=5, choices=RENT_TERM, blank=True, null=True)
-    images = ArrayField(models.ImageField(upload_to='apartment_images'), default=list)
     price_rup = models.BigIntegerField(verbose_name='Price in Rupee', blank=True, null=True)
     price_usd = models.BigIntegerField(verbose_name='Price in USD', blank=True, null=True)
 
@@ -71,3 +74,7 @@ class Feedback(models.Model):
 
     def __str__(self):
         return f'Type {self.type_a}, Text: {self.text}'
+
+
+
+
