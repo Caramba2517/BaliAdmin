@@ -9,6 +9,7 @@ class RentUser(models.Model):
     last_name = models.CharField(verbose_name='Surname', max_length=150)
     username = models.CharField(verbose_name='Telegram Username', max_length=150, blank=True, null=True)
     tg_id = models.BigIntegerField(verbose_name='Telegram ID', null=False, unique=True)
+    phone = models.CharField(verbose_name='Phone Number', max_length=15, null=True)
     register = models.DateTimeField(verbose_name='Date Registration', null=False)
     last_activity = models.DateTimeField(verbose_name='Last Activity', null=False)
     LANGUAGE = [
