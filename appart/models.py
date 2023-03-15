@@ -40,6 +40,13 @@ class Apartment(models.Model):
     link = models.URLField(verbose_name='Link to original source')
     agent_name = models.CharField(verbose_name='Agent Name', max_length=150, blank=True, null=True)
     agent_whats_up = models.URLField(verbose_name='Agent Whats App', blank=True, null=True)
+    APS_TYPE = [
+        ('VI', 'Villa Entirely'),
+        ('RO', 'Room in shared villa'),
+        ('AP', 'Apartment'),
+        ('GH', 'Guesthouse')
+    ]
+    aps_type = models.CharField(verbose_name='Apartment type', max_length=2, choices=APS_TYPE, null=False, default=None)
     location = models.ForeignKey(Location, verbose_name='Location', on_delete=models.CASCADE, null=False)
     bedroom = models.CharField(verbose_name='No. of bedrooms', max_length=5, null=False)
     AMENITIES = (('Kitchen', 'Kitchen'),
