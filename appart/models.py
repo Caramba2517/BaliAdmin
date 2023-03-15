@@ -60,6 +60,7 @@ class Apartment(models.Model):
     rent_term = models.CharField(verbose_name='Rental term', max_length=5, choices=RENT_TERM, blank=True, null=True)
     price_rup = models.BigIntegerField(verbose_name='Price in Rupee', blank=True, null=True)
     price_usd = models.BigIntegerField(verbose_name='Price in USD', blank=True, null=True)
+    description = models.CharField(verbose_name='Description', max_length=900, blank=True, null=True)
 
     def __str__(self):
         return f'Unique ID: {self.id}'
