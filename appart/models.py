@@ -17,6 +17,7 @@ class RentUser(models.Model):
     ]
     default_lang = models.CharField(verbose_name='Default language', null=False, choices=LANGUAGE, max_length=2,
                                     default=None)
+    subscribe = models.BooleanField(verbose_name='Activity subscribe', default=False)
 
     def __str__(self):
         return f'Telegram Username: {self.username}, Telegram ID: {self.tg_id}'
@@ -30,7 +31,7 @@ class Location(models.Model):
 
 
 class Image(models.Model):
-    image = models.ImageField(upload_to=f'appart/images/')
+    image = models.ImageField(upload_to=f'images/')
 
     def __str__(self):
         return f'Image ID: {self.id}'
@@ -76,13 +77,19 @@ class Apartment(models.Model):
 class Feedback(models.Model):
     type_a = models.CharField(verbose_name='Type of appeal', max_length=155, null=False)
     user = models.ForeignKey(RentUser, on_delete=models.CASCADE)
-    appart = models.ForeignKey(Apartment, on_delete=models.CASCADE)
     text = models.TextField(null=False)
-    answer = models.TextField(null=True)
+    answer = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return f'Type {self.type_a}, Text: {self.text}'
 
 
+class SaveAps(models.Model):
+    user = models.ForeignKey(RentUser, verbose_name='User Name', on_delete=models.CASCADE)
+    apart = models.ForeignKey(Apartment, verbose_name='Apartment ID', on_delete=models.CASCADE)
 
+    class Meta:
+        unique_together = (('user', 'apart'),)
 
+    def __str__(self):
+        return f'User: {self.user}, Apartment: {self.apart}'
