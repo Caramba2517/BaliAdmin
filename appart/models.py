@@ -76,9 +76,10 @@ class Apartment(models.Model):
 
 class Feedback(models.Model):
     type_a = models.CharField(verbose_name='Type of appeal', max_length=155, null=False)
-    user = models.ForeignKey(RentUser, on_delete=models.CASCADE)
+    user = models.OneToOneField(RentUser, unique=True, on_delete=models.CASCADE)
     text = models.TextField(null=False)
     answer = models.TextField(blank=True, null=True)
+    history = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return f'Type {self.type_a}, Text: {self.text}'
