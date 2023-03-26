@@ -1,6 +1,5 @@
 from django.db import models
 
-# Create your models here.
 
 class UsersStatistic(models.Model):
     date = models.DateField(verbose_name='Date', unique=True, null=False)

@@ -85,7 +85,7 @@ class Feedback(models.Model):
         return f'Type {self.type_a}, Text: {self.text}'
 
 
-class SaveAps(models.Model):
+class SaveAp(models.Model):
     user = models.ForeignKey(RentUser, verbose_name='User Name', on_delete=models.CASCADE)
     apart = models.ForeignKey(Apartment, verbose_name='Apartment ID', on_delete=models.CASCADE)
 
