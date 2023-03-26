@@ -8,7 +8,7 @@ from aiogram import types, Bot, Dispatcher
 import psycopg2
 
 db = psycopg2.connect(
-    host="80.90.190.122",
+    host="85.92.111.75",
     database="default_db",
     user="gen_user",
     password="Golova123"

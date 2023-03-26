@@ -31,7 +31,7 @@ class Location(models.Model):
 
 
 class Image(models.Model):
-    image = models.ImageField(upload_to=f'images/')
+    image = models.ImageField(upload_to=f"image/%Y/%m/")
 
     def __str__(self):
         return f'Image ID: {self.id}'
@@ -94,3 +94,11 @@ class SaveAps(models.Model):
 
     def __str__(self):
         return f'User: {self.user}, Apartment: {self.apart}'
+
+
+class SaveRequest(models.Model):
+    user = models.ForeignKey(RentUser, verbose_name='User Name', on_delete=models.CASCADE)
+    request = models.TextField(blank=True, null=True)
+    
+    def __str__(self):
+        return f'User: {self.user}'

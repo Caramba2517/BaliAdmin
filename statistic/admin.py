@@ -1,6 +1,6 @@
 from django.contrib import admin
-from statistic.models import Statistic
+from statistic.models import UsersStatistic
 # Register your models here.
 
 
-admin.site.register(Statistic)
+admin.site.register(UsersStatistic)
