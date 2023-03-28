@@ -1,5 +1,6 @@
 from django.db import models
 from multiselectfield import MultiSelectField
+from datetime import datetime
 
 
 class RentUser(models.Model):
@@ -69,9 +70,10 @@ class Apartment(models.Model):
     price_rup = models.BigIntegerField(verbose_name='Price in Rupee', blank=True, null=True)
     price_usd = models.BigIntegerField(verbose_name='Price in USD', blank=True, null=True)
     description = models.CharField(verbose_name='Description', max_length=900, blank=True, null=True)
+    date = models.DateTimeField(verbose_name='Date upload', auto_now=True, null=False)
 
     def __str__(self):
-        return f'Unique ID: {self.id}'
+        return f'Unique ID: {self.id}, Date upload: {self.date.strftime("%Y.%m.%d")}'
 
 
 class Feedback(models.Model):
