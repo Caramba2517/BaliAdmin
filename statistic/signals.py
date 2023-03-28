@@ -1,6 +1,8 @@
 import datetime
 import psycopg2
-from django_cron import CronJobBase, Schedule
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
+
 db = psycopg2.connect(
     host="85.92.111.75",
     database="default_db",
@@ -65,10 +67,12 @@ def location_statistic_query():
 
 def ads_statistic_query():
     now = datetime.datetime.now().date()
-    cur.execute("SELECT COUNT (*) from appart_apartment ")
+    cur.execute("SELECT COUNT (*) from appart_apartment")
     total_result = cur.fetchone()
+    db.rollback()
     cur.execute(f"SELECT COUNT (*) from appart_apartment WHERE date = '{now}'")
     daily_result = cur.fetchone()
+    db.rollback()
     if daily_result is None:
         daily_result = 0
     cur.execute(f"INSERT INTO statistic_adsstatistic (date, total, daily) VALUES (%s, %s, %s)",
