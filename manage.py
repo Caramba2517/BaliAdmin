@@ -3,9 +3,6 @@
 import os
 import sys
 
-import schedule
-
-
 
 def main():
     """Run administrative tasks."""

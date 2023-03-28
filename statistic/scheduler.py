@@ -1,5 +1,7 @@
 import schedule
-from statistic.signals import usd_statistic_query, rup_statistic_query, location_statistic_query, ads_statistic_query
+
+from statistic.signals import usd_statistic_query, rup_statistic_query, location_statistic_query, ads_statistic_query, \
+    google_sheets
 
 
 def on_startup():
@@ -11,7 +13,7 @@ def on_startup():
         location_statistic_query()
         google_sheets()
 
-    schedule.every().day.at('23:59').do(statistic_scheduler)
+    schedule.every().day().at('23:55').do(statistic_scheduler)
     while True:
         schedule.run_pending()
 

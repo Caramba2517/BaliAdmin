@@ -7,3 +7,4 @@ class StatisticConfig(AppConfig):
 
     def ready(self):
         import statistic.signals
+
