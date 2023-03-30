@@ -1,7 +1,8 @@
 from django.db import models
 from multiselectfield import MultiSelectField
-from datetime import datetime
-
+from django.contrib.contenttypes.models import ContentType
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
 
 class RentUser(models.Model):
     first_name = models.CharField(verbose_name='First Name', max_length=150)
@@ -101,6 +102,25 @@ class SaveAp(models.Model):
 class SaveRequest(models.Model):
     user = models.ForeignKey(RentUser, verbose_name='User Name', on_delete=models.CASCADE)
     request = models.TextField(blank=True, null=True)
-    
+
     def __str__(self):
         return f'User: {self.user}'
+
+
+class SendMessageForAll(models.Model):
+    date = models.DateTimeField(auto_now=True)
+    text = models.TextField(verbose_name='Write your message for all users in VillaBot', null=False)
+    images = models.ImageField(upload_to='SendMessage/', verbose_name='Image', blank=True)
+
+    def __str__(self):
+        return f'Mass message sending: {self.date}'
+
+
+class SendMessageForChooseUser(models.Model):
+    date = models.DateTimeField(auto_now=True)
+    users = models.ForeignKey(RentUser, verbose_name='Select user', on_delete=models.CASCADE, null=True)
+    text = models.TextField(verbose_name='Write your message for selected user in VillaBot', null=False)
+    images = models.ImageField(upload_to='SendMessage/', verbose_name='Image', blank=True, null=True)
+
+    def __str__(self):
+        return f'Message sending to {self.users}: {self.date}'
