@@ -40,6 +40,7 @@ class Image(models.Model):
 
 
 class Apartment(models.Model):
+    author = models.ForeignKey(User, on_delete=models.CASCADE, auto_created=True, null=True)
     link = models.URLField(verbose_name='Link to original source')
     agent_name = models.CharField(verbose_name='Agent Name', max_length=150, blank=True, null=True)
     agent_whats_up = models.URLField(verbose_name='Agent Whats App', blank=True, null=True)
@@ -73,8 +74,15 @@ class Apartment(models.Model):
     description = models.CharField(verbose_name='Description', max_length=900, blank=True, null=True)
     date = models.DateTimeField(verbose_name='Date upload', auto_now=True, null=False)
 
+    class Meta:
+        permissions = [
+            ("can_edit_owned_apartment", "Can edit owned apartment"),
+            ("can_delete_owned_apartment", "Can delete owned apartment"),
+        ]
+
     def __str__(self):
         return f'Unique ID: {self.id}, Date upload: {self.date.strftime("%Y.%m.%d")}'
+
 
 
 class Feedback(models.Model):
