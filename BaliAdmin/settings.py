@@ -80,11 +80,11 @@ WSGI_APPLICATION = 'BaliAdmin.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'default_db',
-        'USER': "gen_user",
-        'PASSWORD': "Golova123",
-        'HOST': "85.92.111.75",
-        'PORT': '5432',
+        'NAME': 'defaultdb',
+        'USER': "doadmin",
+        'PASSWORD': "AVNS_9TWJQ4KUZGhFG6d7kFX",
+        'HOST': "db-villabot-do-user-13857954-0.b.db.ondigitalocean.com",
+        'PORT': '25060',
     }
 }
 

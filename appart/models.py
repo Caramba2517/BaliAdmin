@@ -36,7 +36,8 @@ class Image(models.Model):
     image = models.ImageField(upload_to=f"image/%Y/%m/")
 
     def __str__(self):
-        return f'Image ID: {self.id}'
+        image_name = str(self.image).split("/")[3]
+        return f'Image name: {image_name}'
 
 
 class Apartment(models.Model):
