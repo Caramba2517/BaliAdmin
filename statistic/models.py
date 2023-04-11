@@ -66,12 +66,24 @@ class PriceUSDStatistic(models.Model):
 
 class PriceRUPStatistic(models.Model):
     date = models.DateField()
-    first = models.IntegerField(verbose_name='less than 10 mln', blank=True, null=True, default=0)
-    second = models.IntegerField(verbose_name='10 mln - 20 mln', blank=True, null=True, default=0)
-    third = models.IntegerField(verbose_name='20 mln - 30 mln', blank=True, null=True, default=0)
-    fourth = models.IntegerField(verbose_name='30 mln - 40 mln', blank=True, null=True, default=0)
-    fifth = models.IntegerField(verbose_name='40 mln - 50 mln', blank=True, null=True, default=0)
-    sixth = models.IntegerField(verbose_name='more than 50 mln', blank=True, null=True, default=0)
+    first_day = models.IntegerField(verbose_name='[DAY] Less than 300k', blank=True, null=True, default=0)
+    second_day = models.IntegerField(verbose_name='[DAY] 300k - 700k', blank=True, null=True, default=0)
+    third_day = models.IntegerField(verbose_name='[DAY] 700k - 1 mln', blank=True, null=True, default=0)
+    fourth_day = models.IntegerField(verbose_name='[DAY] 1 mln - 1,5 mln', blank=True, null=True, default=0)
+    fifth_day = models.IntegerField(verbose_name='[DAY] 1,5 mln - 2 mln', blank=True, null=True, default=0)
+    sixth_day = models.IntegerField(verbose_name='[DAY] more than 2 mln', blank=True, null=True, default=0)
+    first_month = models.IntegerField(verbose_name='[MONTH] less than 10 mln', blank=True, null=True, default=0)
+    second_month = models.IntegerField(verbose_name='[MONTH] 10 mln - 20 mln', blank=True, null=True, default=0)
+    third_month = models.IntegerField(verbose_name='[MONTH] 20 mln - 30 mln', blank=True, null=True, default=0)
+    fourth_month = models.IntegerField(verbose_name='[MONTH] 30 mln - 40 mln', blank=True, null=True, default=0)
+    fifth_month = models.IntegerField(verbose_name='[MONTH] 40 mln - 50 mln', blank=True, null=True, default=0)
+    sixth_month = models.IntegerField(verbose_name='[MONTH] more than 50 mln', blank=True, null=True, default=0)
+    first_year = models.IntegerField(verbose_name='[YEAR] less than 120 mln', blank=True, null=True, default=0)
+    second_year = models.IntegerField(verbose_name='[YEAR] 120 mln - 240 mln', blank=True, null=True, default=0)
+    third_year = models.IntegerField(verbose_name='[YEAR] 240 mln - 360 mln', blank=True, null=True, default=0)
+    fourth_year = models.IntegerField(verbose_name='[YEAR] 360 mln - 480 mln', blank=True, null=True, default=0)
+    fifth_year = models.IntegerField(verbose_name='[YEAR] 480 mln - 600 mln', blank=True, null=True, default=0)
+    sixth_year = models.IntegerField(verbose_name='[YEAR] more than 600 mln', blank=True, null=True, default=0)
 
     def __str__(self):
         return f'Date: {self.date}'

@@ -13,8 +13,8 @@ db = psycopg2.connect(
     user="doadmin",
     password="AVNS_9TWJQ4KUZGhFG6d7kFX",
     port="25060"
-
 )
+
 
 cur = db.cursor()
 

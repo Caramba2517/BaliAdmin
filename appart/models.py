@@ -4,6 +4,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
+
 class RentUser(models.Model):
     first_name = models.CharField(verbose_name='First Name', max_length=150)
     last_name = models.CharField(verbose_name='Surname', max_length=150)
@@ -83,7 +84,6 @@ class Apartment(models.Model):
 
     def __str__(self):
         return f'Unique ID: {self.id}, Date upload: {self.date.strftime("%Y.%m.%d")}'
-
 
 
 class Feedback(models.Model):

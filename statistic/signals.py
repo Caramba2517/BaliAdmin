@@ -4,11 +4,13 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
 db = psycopg2.connect(
-    host="85.92.111.75",
-    database="default_db",
-    user="gen_user",
-    password="Golova123"
+    host="db-villabot-do-user-13857954-0.b.db.ondigitalocean.com",
+    database="defaultdb",
+    user="doadmin",
+    password="AVNS_9TWJQ4KUZGhFG6d7kFX",
+    port="25060"
 )
+
 cur = db.cursor()
 
 
@@ -67,20 +69,52 @@ def usd_statistic_query():
 
 def rup_statistic_query():
     now = datetime.datetime.now().date()
-    cur.execute("SELECT COUNT (*) from appart_apartment WHERE price_rup BETWEEN 0 AND 9999999")
-    first = cur.fetchone()
+    cur.execute("SELECT COUNT (*) from appart_apartment WHERE price_rup BETWEEN 0 AND 299999")
+    first_day = cur.fetchone()
+    cur.execute("SELECT COUNT (*) from appart_apartment WHERE price_rup BETWEEN 300000 AND 699999")
+    second_day = cur.fetchone()
+    cur.execute("SELECT COUNT (*) from appart_apartment WHERE price_rup BETWEEN 700000 AND 999999")
+    third_day = cur.fetchone()
+    cur.execute("SELECT COUNT (*) from appart_apartment WHERE price_rup BETWEEN 1000000 AND 1499999")
+    fourth_day = cur.fetchone()
+    cur.execute("SELECT COUNT (*) from appart_apartment WHERE price_rup BETWEEN 1500000 AND 1999999")
+    fifth_day = cur.fetchone()
+    cur.execute("SELECT COUNT (*) from appart_apartment WHERE price_rup BETWEEN 2000000 AND 4999999")
+    sixth_day = cur.fetchone()
+    cur.execute("SELECT COUNT (*) from appart_apartment WHERE price_rup BETWEEN 5000000 AND 9999999")
+    first_month = cur.fetchone()
     cur.execute("SELECT COUNT (*) from appart_apartment WHERE price_rup BETWEEN 10000000 AND 19999999")
-    second = cur.fetchone()
+    second_month = cur.fetchone()
     cur.execute("SELECT COUNT (*) from appart_apartment WHERE price_rup BETWEEN 20000000 AND 29999999")
-    third = cur.fetchone()
+    third_month = cur.fetchone()
     cur.execute("SELECT COUNT (*) from appart_apartment WHERE price_rup BETWEEN 30000000 AND 39999999")
-    fourth = cur.fetchone()
+    fourth_month = cur.fetchone()
     cur.execute("SELECT COUNT (*) from appart_apartment WHERE price_rup BETWEEN 40000000 AND 49999999")
-    fifth = cur.fetchone()
-    cur.execute("SELECT COUNT (*) from appart_apartment WHERE price_rup BETWEEN 50000000 AND 1000000000")
-    sixth = cur.fetchone()
-    cur.execute(f'INSERT INTO statistic_pricerupstatistic (date, first, second, third, fourth, fifth, sixth) '
-                f'VALUES (%s, %s, %s, %s, %s, %s, %s)', (now, first, second, third, fourth, fifth, sixth,))
+    fifth_month = cur.fetchone()
+    cur.execute("SELECT COUNT (*) from appart_apartment WHERE price_rup BETWEEN 50000000 AND 84999999")
+    sixth_month = cur.fetchone()
+    cur.execute("SELECT COUNT (*) from appart_apartment WHERE price_rup BETWEEN 85000000 AND 119999999")
+    first_year = cur.fetchone()
+    cur.execute("SELECT COUNT (*) from appart_apartment WHERE price_rup BETWEEN 120000000 AND 239999999")
+    second_year = cur.fetchone()
+    cur.execute("SELECT COUNT (*) from appart_apartment WHERE price_rup BETWEEN 240000000 AND 359999999")
+    third_year = cur.fetchone()
+    cur.execute("SELECT COUNT (*) from appart_apartment WHERE price_rup BETWEEN 360000000 AND 479999999")
+    fourth_year = cur.fetchone()
+    cur.execute("SELECT COUNT (*) from appart_apartment WHERE price_rup BETWEEN 480000000 AND 599999999")
+    fifth_year = cur.fetchone()
+    cur.execute("SELECT COUNT (*) from appart_apartment WHERE price_rup >= 600000000")
+    sixth_year = cur.fetchone()
+    params = [now] + [x[0] if x is not None else 0 for x in (
+        first_day, second_day, third_day, fourth_day, fifth_day, sixth_day, first_month, second_month,
+        third_month, fourth_month, fifth_month, sixth_month, first_year, second_year, third_year,
+        fourth_year, fifth_year, sixth_year
+    )]
+    cur.execute(f'INSERT INTO statistic_pricerupstatistic (date, first_day, second_day, third_day, fourth_day, '
+                f'fifth_day, sixth_day, first_month, second_month, third_month, fourth_month, fifth_month, '
+                f'sixth_month, first_year, second_year, third_year, fourth_year, fifth_year, sixth_year) '
+                f'VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
+                params)
     db.commit()
 
 
@@ -119,7 +153,7 @@ def google_sheets():
     creds = ServiceAccountCredentials.from_json_keyfile_name(
         '/Users/caramba/PycharmProject/BaliAdmin/json/villabot-382008-e3b439d175c9.json', scope)
     client = gspread.authorize(creds)
-    sheet_url = "https://docs.google.com/spreadsheets/d/1_9L2eHxJKSU87Ti856521tzm_XXeBusYPpifILtlPaY"
+    sheet_url = "https://docs.google.com/spreadsheets/d/169LhrSJTHiUd-jFCS23nuoe-9dufI2WeubEHfq_kfKs"
     sh = client.open_by_url(sheet_url)
     now = datetime.datetime.now().date()
     cur.execute(f"SELECT * FROM statistic_commonstatistic WHERE date = '{now}'")
@@ -178,18 +212,24 @@ def google_sheets():
 
     if apart_stats_worksheet:
         for x in range(0, count[0]):
-            row = [str(datetime.datetime.now().date()), apart_stats[x][6], apart_stats[x][1], apart_stats[x][2],
-                   apart_stats[x][3],
-                   apart_stats[x][4].strftime('%Y-%m-%d %H:%M:%S'), apart_stats[x][5].strftime('%Y-%m-%d %H:%M:%S')]
-            apart_stats_worksheet.append_row(row)
+            try:
+                row = [str(datetime.datetime.now().date()), apart_stats[x][6], apart_stats[x][1], apart_stats[x][2],
+                       apart_stats[x][3],
+                       apart_stats[x][4].strftime('%Y-%m-%d %H:%M:%S'), apart_stats[x][5].strftime('%Y-%m-%d %H:%M:%S')]
+                apart_stats_worksheet.append_row(row)
+            except IndexError:
+                pass
+
     else:
         apart_stats_worksheet = sh.add_worksheet(title="Apartment Statistics", rows="100", cols="20")
         for x in range(0, count[0]):
-            row = [str(datetime.datetime.now().date()), apart_stats[x][6], apart_stats[x][1], apart_stats[x][2],
-                   apart_stats[x][3],
-                   apart_stats[x][4].strftime('%Y-%m-%d %H:%M:%S'), apart_stats[x][5].strftime('%Y-%m-%d %H:%M:%S')]
-            apart_stats_worksheet.append_row(row)
-
+            try:
+                row = [str(datetime.datetime.now().date()), apart_stats[x][6], apart_stats[x][1], apart_stats[x][2],
+                       apart_stats[x][3],
+                       apart_stats[x][4].strftime('%Y-%m-%d %H:%M:%S'), apart_stats[x][5].strftime('%Y-%m-%d %H:%M:%S')]
+                apart_stats_worksheet.append_row(row)
+            except IndexError:
+                pass
     if common_worksheet:
         common_worksheet.append_row([str(common_stats[1]), common_stats[2], common_stats[3], common_stats[4],
                                      common_stats[5], common_stats[6], common_stats[7], common_stats[8],
@@ -206,21 +246,33 @@ def google_sheets():
         location_worksheet = sh.add_worksheet(title="Location Statistics", rows="100", cols="20")
         location_worksheet.append_row(['Location Statistics', str(location_stats[1]), location_stats[2]])
     if price_usd_worksheet:
-        price_usd_worksheet.append_row([str((price_usd_stats[1])), price_usd_stats[2], price_usd_stats[3],
-                                        price_usd_stats[4], price_usd_stats[5], price_usd_stats[6], price_usd_stats[7]])
+        price_usd_worksheet.append_row([str((price_usd_stats[1])), price_usd_stats[8],
+             price_usd_stats[9], price_usd_stats[10], price_usd_stats[11], price_usd_stats[12], price_usd_stats[13],
+             price_usd_stats[2], price_usd_stats[3], price_usd_stats[4], price_usd_stats[5], price_usd_stats[6],
+             price_usd_stats[7], price_usd_stats[14], price_usd_stats[15], price_usd_stats[16], price_usd_stats[17],
+             price_usd_stats[18],price_usd_stats[19]])
     else:
         price_usd_worksheet = sh.add_worksheet(title="Price USD Statistics", rows="100", cols="20")
         price_usd_worksheet.append_row(
-            ['Price USD Statistics', str((price_usd_stats[1])), price_usd_stats[2], price_usd_stats[3],
-             price_usd_stats[4], price_usd_stats[5], price_usd_stats[6], price_usd_stats[7]])
+            ['Price USD Statistics', str((price_usd_stats[1])), price_usd_stats[8],
+             price_usd_stats[9], price_usd_stats[10], price_usd_stats[11], price_usd_stats[12], price_usd_stats[13],
+             price_usd_stats[2], price_usd_stats[3], price_usd_stats[4], price_usd_stats[5], price_usd_stats[6],
+             price_usd_stats[7], price_usd_stats[14], price_usd_stats[15], price_usd_stats[16], price_usd_stats[17],
+             price_usd_stats[18], price_usd_stats[19]])
     if price_rup_worksheet:
         price_rup_worksheet.append_row([str((price_rup_stats[1])), price_rup_stats[2], price_rup_stats[3],
-                                        price_rup_stats[4], price_rup_stats[5], price_rup_stats[6], price_rup_stats[7]])
+             price_rup_stats[4], price_rup_stats[5], price_rup_stats[6], price_rup_stats[7], price_rup_stats[8],
+             price_rup_stats[9], price_rup_stats[10], price_rup_stats[11], price_rup_stats[12], price_rup_stats[13],
+             price_rup_stats[14], price_rup_stats[15],price_rup_stats[16], price_rup_stats[17], price_rup_stats[18],
+             price_rup_stats[19]])
     else:
         price_rup_worksheet = sh.add_worksheet(title="Price RUP Statistics", rows="100", cols="20")
         price_rup_worksheet.append_row(
             ['Price RUP Statistics', str((price_rup_stats[1])), price_rup_stats[2], price_rup_stats[3],
-             price_rup_stats[4], price_rup_stats[5], price_rup_stats[6], price_rup_stats[7]])
+             price_rup_stats[4], price_rup_stats[5], price_rup_stats[6], price_rup_stats[7], price_rup_stats[8],
+             price_rup_stats[9], price_rup_stats[10], price_rup_stats[11], price_rup_stats[12], price_rup_stats[13],
+             price_rup_stats[14], price_rup_stats[15],price_rup_stats[16], price_rup_stats[17], price_rup_stats[18],
+             price_rup_stats[19]])
     if ads_worksheet:
         ads_worksheet.append_row([(str(ads_stats[1])), ads_stats[2], ads_stats[3]])
     else:
