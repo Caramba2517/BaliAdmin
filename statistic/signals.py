@@ -14,7 +14,7 @@ cur = db.cursor()
 
 def usd_statistic_query():
     now = datetime.datetime.now().date()
-    cur.execute("SELECT COUNT (*) from appart_apartment WHERE price_usd BETWEEN 0 AND 649")
+    cur.execute("SELECT COUNT (*) from appart_apartment WHERE price_usd BETWEEN 300 AND 649")
     first = cur.fetchone()
     cur.execute("SELECT COUNT (*) from appart_apartment WHERE price_usd BETWEEN 650 AND 1299")
     second = cur.fetchone()
@@ -24,10 +24,44 @@ def usd_statistic_query():
     fourth = cur.fetchone()
     cur.execute("SELECT COUNT (*) from appart_apartment WHERE price_usd BETWEEN 2600 AND 3249")
     fifth = cur.fetchone()
-    cur.execute("SELECT COUNT (*) from appart_apartment WHERE price_usd BETWEEN 3250 AND 1000000")
+    cur.execute("SELECT COUNT (*) from appart_apartment WHERE price_usd BETWEEN 3250 AND 5000")
     sixth = cur.fetchone()
-    cur.execute(f'INSERT INTO statistic_priceusdstatistic (date, first, second, third, fourth, fifth, sixth) '
-                f'VALUES (%s, %s, %s, %s, %s, %s, %s)', (now, first, second, third, fourth, fifth, sixth,))
+
+    # Count apartments in different price ranges per day
+    cur.execute("SELECT COUNT(*) FROM appart_apartment WHERE price_usd BETWEEN 0 AND 19")
+    first_day = cur.fetchone()
+    cur.execute("SELECT COUNT(*) FROM appart_apartment WHERE price_usd BETWEEN 20 AND 49")
+    second_day = cur.fetchone()
+    cur.execute("SELECT COUNT(*) FROM appart_apartment WHERE price_usd BETWEEN 50 AND 69")
+    third_day = cur.fetchone()
+    cur.execute("SELECT COUNT(*) FROM appart_apartment WHERE price_usd BETWEEN 70 AND 99")
+    fourth_day = cur.fetchone()
+    cur.execute("SELECT COUNT(*) FROM appart_apartment WHERE price_usd BETWEEN 100 AND 139")
+    fifth_day = cur.fetchone()
+    cur.execute("SELECT COUNT(*) FROM appart_apartment WHERE price_usd BETWEEN 139 AND 300")
+    sixth_day = cur.fetchone()
+
+    # Count apartments in different price ranges per year
+    cur.execute("SELECT COUNT(*) FROM appart_apartment WHERE price_usd BETWEEN 5000 AND 7999")
+    first_year = cur.fetchone()
+    cur.execute("SELECT COUNT(*) FROM appart_apartment WHERE price_usd BETWEEN 8000 AND 15999")
+    second_year = cur.fetchone()
+    cur.execute("SELECT COUNT(*) FROM appart_apartment WHERE price_usd BETWEEN 16000 AND 23999")
+    third_year = cur.fetchone()
+    cur.execute("SELECT COUNT(*) FROM appart_apartment WHERE price_usd BETWEEN 24000 AND 31999")
+    fourth_year = cur.fetchone()
+    cur.execute("SELECT COUNT(*) FROM appart_apartment WHERE price_usd BETWEEN 32000 AND 39999")
+    fifth_year = cur.fetchone()
+    cur.execute("SELECT COUNT(*) FROM appart_apartment WHERE price_usd >= 40000")
+    sixth_year = cur.fetchone()
+    cur.execute(
+        f'INSERT INTO statistic_priceusdstatistic (date, first_month, second_month, third_month, fourth_month, fifth_month, sixth_month,'
+        f'first_day, second_day, third_day, fourth_day, fifth_day, sixth_day,'
+        f'first_year, second_year, third_year, fourth_year, fifth_year, sixth_year) '
+        f'VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
+        (now, first, second, third, fourth, fifth, sixth,
+         first_day, second_day, third_day, fourth_day, fifth_day, sixth_day,
+         first_year, second_year, third_year, fourth_year, fifth_year, sixth_year,))
     db.commit()
 
 
@@ -83,7 +117,7 @@ def ads_statistic_query():
 def google_sheets():
     scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
     creds = ServiceAccountCredentials.from_json_keyfile_name(
-        '/Users/caramba/PycharmProject/BaliAdmin/json/micro-elysium-368912-0e56eb2fb3fe.json', scope)
+        '/Users/caramba/PycharmProject/BaliAdmin/json/villabot-382008-e3b439d175c9.json', scope)
     client = gspread.authorize(creds)
     sheet_url = "https://docs.google.com/spreadsheets/d/1_9L2eHxJKSU87Ti856521tzm_XXeBusYPpifILtlPaY"
     sh = client.open_by_url(sheet_url)
@@ -129,13 +163,18 @@ def google_sheets():
             ads_worksheet = worksheet
         elif worksheet.title == 'Apartment Statistics':
             apart_stats_worksheet = worksheet
-
-    common_stats = [0 if x is None else x for x in common_stats]
+    try:
+        common_stats = [0 if x is None else x for x in common_stats]
+    except IndexError:
+        print("IndexError common stat")
     location_stats = [0 if x is None else x for x in location_stats]
     price_usd_stats = [0 if x is None else x for x in price_usd_stats]
     price_rup_stats = [0 if x is None else x for x in price_rup_stats]
     ads_stats = [0 if x is None else x for x in ads_stats]
-    apart_stats = [0 if x is None else x for x in apart_stats]
+    try:
+        apart_stats = [0 if x is None else x for x in apart_stats]
+    except IndexError:
+        print("IndexError apart stat")
 
     if apart_stats_worksheet:
         for x in range(0, count[0]):
