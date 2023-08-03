@@ -135,16 +135,14 @@ def location_statistic_query():
 
 def ads_statistic_query():
     now = datetime.datetime.now().date()
-    cur.execute("SELECT COUNT (*) from appart_apartment")
+    cur.execute("SELECT COUNT(*) as total_result FROM appart_apartment")
     total_result = cur.fetchone()
-    db.rollback()
-    cur.execute(f"SELECT COUNT (*) from appart_apartment WHERE date = '{now}'")
+    cur.execute("SELECT COUNT(*) as daily_result FROM appart_apartment WHERE DATE(date) = DATE(NOW())")
     daily_result = cur.fetchone()
-    db.rollback()
-    if daily_result is None:
-        daily_result = 0
-    cur.execute(f"INSERT INTO statistic_adsstatistic (date, total, daily) VALUES (%s, %s, %s)",
-                (now, total_result[0], daily_result[0],))
+
+    daily_result = daily_result[0] if daily_result else 0
+    cur.execute("INSERT INTO statistic_adsstatistic (date, total, daily) VALUES (%s, %s, %s)",
+                (now, total_result[0], daily_result))
     db.commit()
 
 
@@ -219,7 +217,8 @@ def google_sheets():
                 apart_stats_worksheet.append_row(row)
             except IndexError:
                 pass
-
+            except TypeError:
+                pass
     else:
         apart_stats_worksheet = sh.add_worksheet(title="Apartment Statistics", rows="100", cols="20")
         for x in range(0, count[0]):
@@ -229,6 +228,8 @@ def google_sheets():
                        apart_stats[x][4].strftime('%Y-%m-%d %H:%M:%S'), apart_stats[x][5].strftime('%Y-%m-%d %H:%M:%S')]
                 apart_stats_worksheet.append_row(row)
             except IndexError:
+                pass
+            except TypeError:
                 pass
     if common_worksheet:
         common_worksheet.append_row([str(common_stats[1]), common_stats[2], common_stats[3], common_stats[4],
@@ -241,7 +242,12 @@ def google_sheets():
              common_stats[5], common_stats[6], common_stats[7], common_stats[8], common_stats[9]])
 
     if location_worksheet:
-        location_worksheet.append_row([str(location_stats[1]), location_stats[2]])
+        try:
+            location_worksheet.append_row([str(location_stats[1]), location_stats[2]])
+        except IndexError:
+            pass
+        except TypeError:
+            pass
     else:
         location_worksheet = sh.add_worksheet(title="Location Statistics", rows="100", cols="20")
         location_worksheet.append_row(['Location Statistics', str(location_stats[1]), location_stats[2]])
