@@ -21,6 +21,7 @@ class RentUser(models.Model):
     default_lang = models.CharField(verbose_name='Default language', null=False, choices=LANGUAGE, max_length=2,
                                     default=None)
     subscribe = models.BooleanField(verbose_name='Activity subscribe', default=False)
+    date_subscribe = models.DateField(verbose_name="Date start subscribe", blank=True, null=True)
 
     def __str__(self):
         return f'Telegram Username: {self.username}, Telegram ID: {self.tg_id}'
