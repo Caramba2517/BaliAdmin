@@ -1,14 +1,23 @@
 from django.contrib import admin
-from appart.models import RentUser, Location, Apartment, Feedback, Image, SaveAp, SaveRequest, SendMessageForAll, \
+from django.forms import ClearableFileInput
+from appart.models import RentUser, Location, Apartment, Feedback, SaveAp, SaveRequest, SendMessageForAll, \
     SendMessageForChooseUser
+from django import forms
+
+
+class ApartmentForm(forms.ModelForm):
+    class Meta:
+        model = Apartment
+        fields = "__all__"
 
 
 class ApartmentAdmin(admin.ModelAdmin):
     list_display = ('id', 'author', 'location', 'date')
     search_fields = ('id', 'author__username', 'location__name')
-    list_filter = ('aps_type', 'location', 'price_usd', 'price_rup', 'bedroom', 'rent_term')
+    list_filter = ('aps_type', 'location', 'bedroom', 'rent_term')
     ordering = ('-date',)
     readonly_fields = ('date',)
+    form = ApartmentForm
 
     def get_form(self, request, obj=None, **kwargs):
         if obj is None:
@@ -22,7 +31,7 @@ class ApartmentAdmin(admin.ModelAdmin):
         if obj is None:
             return ()
         else:
-            return ('date',)
+            return 'date',
 
     def has_change_permission(self, request, obj=None):
         if obj is not None and request.user == obj.author:
@@ -58,7 +67,6 @@ class ApartmentAdmin(admin.ModelAdmin):
 admin.site.register(RentUser)
 admin.site.register(Location)
 admin.site.register(Feedback)
-admin.site.register(Image)
 admin.site.register(SaveAp)
 admin.site.register(SaveRequest)
 admin.site.register(SendMessageForAll)

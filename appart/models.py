@@ -86,6 +86,7 @@ class Apartment(models.Model):
         return f'Unique ID: {self.id}, Date upload: {self.date.strftime("%Y.%m.%d")}'
 
 
+
 class Feedback(models.Model):
     type_a = models.CharField(verbose_name='Type of appeal', max_length=155, null=False)
     user = models.OneToOneField(RentUser, unique=True, on_delete=models.CASCADE)
@@ -133,3 +134,12 @@ class SendMessageForChooseUser(models.Model):
 
     def __str__(self):
         return f'Message sending to {self.users}: {self.date}'
+
+
+class Payments(models.Model):
+    tg_id = models.ForeignKey(RentUser, verbose_name="Пользователь", on_delete=models.CASCADE)
+    amount = models.BigIntegerField(verbose_name="Сумма пополнения", null=True)
+    invoiceId = models.TextField(verbose_name="Уникальный номер транзакции", null=True, unique=True)
+    crypto_date = models.DateTimeField(verbose_name="Время начала транзакции", null=True)
+    crypto_status = models.TextField(verbose_name="Статус транзакции", blank=True, null=True)
+    yookassa_id = models.TextField(verbose_name='Юкасса ID платежа', blank=True, null=True)
